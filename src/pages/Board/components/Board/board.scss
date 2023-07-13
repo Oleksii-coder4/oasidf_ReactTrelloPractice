@@ -1,0 +1,73 @@
+@import '../../../colors.scss';
+.board {
+  position: fixed;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: $boardBackground;
+}
+.board-header {
+  display: flex;
+  width: 100%;
+  min-height: 10px;
+  background-color: $darkblue;
+}
+.board-header__title {
+  margin: 0 auto;
+  padding: 3px 0;
+  color: white;
+  opacity: 0.8;
+}
+.board-header__nav {
+  text-align: center;
+  margin: auto 10px;
+}
+.board-header__exit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 35px;
+  height: 35px;
+  background-color: rgb(66, 146, 197);
+  border: 1px solid black;
+  border-radius: 3px;
+  box-sizing: border-box;
+  color: #fff;
+  cursor: pointer;
+  font-family: -apple-system, system-ui, 'Segoe UI', 'Liberation Sans', sans-serif;
+  font-size: 14px;
+  margin: 0;
+  outline: none;
+  padding: 10px;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+}
+.board-lists {
+  display: flex;
+  margin: 20px 15px;
+  align-items: flex-start;
+}
+.board-lists__button {
+  background-color: $boardAddButton;
+  border: 1px solid black;
+  border-radius: 3px;
+  box-sizing: border-box;
+  color: #fff;
+  cursor: pointer;
+  display: inline-block;
+  font-family: -apple-system, system-ui, 'Segoe UI', 'Liberation Sans', sans-serif;
+  font-size: 14px;
+  margin: 0;
+  outline: none;
+  padding: 10px;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  transition: all 0.4s ease;
+}
+.board-lists__button:hover {
+  background-color: rgb(180, 222, 252);
+  color: black;
+}
