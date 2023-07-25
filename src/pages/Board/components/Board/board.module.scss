@@ -7,29 +7,32 @@
   right: 0;
   background-color: $boardBackground;
 }
-.board-header {
+.header {
   display: flex;
   width: 100%;
   min-height: 10px;
-  background-color: $darkblue;
+  backdrop-filter: contrast(0.5);
+  border: 2px solid black;
+  padding: 5px;
 }
-.board-header__title {
+.header__title {
   margin: 0 auto;
   padding: 3px 0;
   color: white;
   opacity: 0.8;
+  font-weight: 200;
 }
-.board-header__nav {
+.header__nav {
   text-align: center;
   margin: auto 10px;
 }
-.board-header__exit {
+.header__exit {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   width: 35px;
   height: 35px;
-  background-color: rgb(66, 146, 197);
+  background: rgba(0, 0, 0, 0.1);
   border: 1px solid black;
   border-radius: 3px;
   box-sizing: border-box;
@@ -44,20 +47,49 @@
   text-align: center;
   text-decoration: none;
 }
-.board-lists {
+@keyframes bounce {
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-10px);
+  }
+  60% {
+    transform: translateY(-5px);
+  }
+}
+.title_input {
+  padding: 5px;
+  font-size: 20px;
+  border: 1px solid #ccc; /* Light gray border */
+  border-radius: 4px;
+  outline: none;
+  margin: 0 auto;
+  font-weight: 200;
+  &:focus {
+    border: 1px solid black;
+    animation: 1s bounce ease;
+  }
+}
+.board_lists {
   display: flex;
   margin: 20px 15px;
   align-items: flex-start;
 }
-.board-lists__button {
-  background-color: $boardAddButton;
+.board_lists__button {
+  background: rgba(0, 0, 0, 0.1);
   border: 1px solid black;
   border-radius: 3px;
   box-sizing: border-box;
-  color: #fff;
+  color: white;
+  text-shadow: 1px 1px 1px black;
   cursor: pointer;
   display: inline-block;
-  font-family: -apple-system, system-ui, 'Segoe UI', 'Liberation Sans', sans-serif;
+  font-family: monospace, system-ui, 'Segoe UI', 'Liberation Sans', sans-serif;
   font-size: 14px;
   margin: 0;
   outline: none;
@@ -67,7 +99,6 @@
   text-decoration: none;
   transition: all 0.4s ease;
 }
-.board-lists__button:hover {
-  background-color: rgb(180, 222, 252);
-  color: black;
+.board_lists__button:hover {
+  filter: invert(1);
 }

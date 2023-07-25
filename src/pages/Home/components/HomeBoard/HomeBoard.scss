@@ -1,14 +1,16 @@
 .HomeBoard {
-    word-wrap: break-word;
-    font-size: 16px;
-    width: 250px;
-    height: 80px;
-    border-radius: 3px;
-    margin: 0 0 10px 12px;
-    color: black;
+  word-wrap: break-word;
+  font-size: 16px;
+  width: 250px;
+  height: 80px;
+  border-radius: 3px;
+  margin: 0 0 10px 12px;
+  color: black;
+  box-shadow: 4px 4px 3px rgba($color: #000000, $alpha: 0.4);
 }
 .HomeBoard__title {
-    font-size: 15px;
-    font-family: cursive;
-    padding: 5px;
+  font-size: 15px;
+  font-family: cursive;
+  font-weight: bold;
+  padding: 5px;
 }

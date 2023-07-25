@@ -1,0 +1,57 @@
+.wrapper {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f1f1f1;
+}
+
+.error_container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0; /* Hidden by default */
+  animation: fadeIn 1s forwards; /* Apply the fade-in animation */
+}
+
+.error_message {
+  text-align: center;
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h1 .error_word {
+  font-size: 3rem;
+  margin-bottom: 10px;
+}
+
+p .error_words {
+  font-size: 1.2rem;
+  color: #777;
+  margin-bottom: 20px;
+}
+
+.retry_button {
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px 20px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.retry_button:hover {
+  background-color: #0056b3;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}

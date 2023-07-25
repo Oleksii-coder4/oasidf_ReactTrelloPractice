@@ -1,0 +1,51 @@
+.loader__wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+}
+.loader {
+  --size: 50px;
+  --accent-opacity: 0.25;
+  --color: currentColor;
+  --animation-timing-function: linear;
+  --animation-duration: 2s;
+  position: relative;
+  width: var(--size);
+  height: var(--size);
+}
+
+.loader::before,
+.loader::after {
+  content: '';
+  position: absolute;
+  transform: rotate(0deg);
+  animation: var(--animation-timing-function) var(--animation-duration) infinite loader_animation;
+}
+
+.loader::before {
+  inset: 0;
+  background-color: var(--color);
+  opacity: var(--accent-opacity);
+}
+
+.loader::after {
+  top: 12.5%;
+  left: 12.5%;
+  width: 75%;
+  height: 75%;
+  background-color: var(--color);
+  animation-direction: reverse;
+}
+
+@keyframes loader_animation {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}

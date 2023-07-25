@@ -82,7 +82,10 @@ select {
   display: flex;
   width: 100%;
   min-height: 10px;
-  background-color: rgb(0, 96, 163);
+  -webkit-backdrop-filter: contrast(0.5);
+          backdrop-filter: contrast(0.5);
+  border: 2px solid black;
+  padding: 5px;
 }
 
 .header__title {
@@ -90,6 +93,7 @@ select {
   padding: 3px 0;
   color: white;
   opacity: 0.8;
+  font-weight: 200;
 }
 
 .header__nav {
@@ -103,7 +107,7 @@ select {
   justify-content: center;
   width: 35px;
   height: 35px;
-  background-color: rgb(66, 146, 197);
+  background: rgba(0, 0, 0, 0.1);
   border: 1px solid black;
   border-radius: 3px;
   box-sizing: border-box;
@@ -119,21 +123,47 @@ select {
   text-decoration: none;
 }
 
-.board-lists {
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-10px);
+  }
+  60% {
+    transform: translateY(-5px);
+  }
+}
+.title_input {
+  padding: 5px;
+  font-size: 20px;
+  border: 1px solid #ccc; /* Light gray border */
+  border-radius: 4px;
+  outline: none;
+  margin: 0 auto;
+  font-weight: 200;
+}
+.title_input:focus {
+  border: 1px solid black;
+  animation: 1s bounce ease;
+}
+
+.board_lists {
   display: flex;
   margin: 20px 15px;
   align-items: flex-start;
 }
 
-.board-lists__button {
-  background-color: rgb(55, 149, 206);
+.board_lists__button {
+  background: rgba(0, 0, 0, 0.1);
   border: 1px solid black;
   border-radius: 3px;
   box-sizing: border-box;
-  color: #fff;
+  color: white;
+  text-shadow: 1px 1px 1px black;
   cursor: pointer;
   display: inline-block;
-  font-family: -apple-system, system-ui, "Segoe UI", "Liberation Sans", sans-serif;
+  font-family: monospace, system-ui, "Segoe UI", "Liberation Sans", sans-serif;
   font-size: 14px;
   margin: 0;
   outline: none;
@@ -144,7 +174,6 @@ select {
   transition: all 0.4s ease;
 }
 
-.board-lists__button:hover {
-  background-color: rgb(180, 222, 252);
-  color: black;
-}/*# sourceMappingURL=board.css.map */
+.board_lists__button:hover {
+  filter: invert(1);
+}/*# sourceMappingURL=board.module.css.map */

@@ -6,10 +6,12 @@
   border-radius: 3px;
   margin: 0 0 10px 12px;
   color: black;
+  box-shadow: 4px 4px 3px rgba(0, 0, 0, 0.4);
 }
 
 .HomeBoard__title {
   font-size: 15px;
   font-family: cursive;
+  font-weight: bold;
   padding: 5px;
 }/*# sourceMappingURL=HomeBoard.css.map */
