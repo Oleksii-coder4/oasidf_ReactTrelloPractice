@@ -41,7 +41,7 @@ const TitleInput = function ({ board, params, getData }: any) {
         />
       ) : (
         <h1 className={classes.header__title} onClick={() => handleTitleClick()}>
-          {board.title}
+          {titleInputValue}
         </h1>
       )}
     </div>

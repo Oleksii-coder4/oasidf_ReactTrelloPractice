@@ -1,5 +1,6 @@
 export interface addListButton {
   params: any;
+  setBoard: any;
   board: {
     title: string;
     custom?: {

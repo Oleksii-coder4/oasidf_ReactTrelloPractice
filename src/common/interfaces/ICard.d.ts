@@ -1,5 +1,7 @@
 interface ICard {
-    id: number;
-    title: string;
+  title: string;
+  list_id: number;
+  position: number;
+  id: number;
 }
-export default ICard
+export default ICard;

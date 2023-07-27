@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ICard from '../../../../common/interfaces/ICard';
 import Card from '../Card/Card';
 import './css/list.css';
 import instance from '../../../../api/request';
+import AddCardButton from './AddCardButton/AddCardButton';
 interface list {
   cards: ICard[];
   list: any;
@@ -10,45 +11,29 @@ interface list {
   getData: () => void;
 }
 const List = function ({ cards, list, params, getData }: list) {
-  const [cardIsEditing, setCardIsEditing] = useState(false);
-  const [cardInputValue, setCardInputValue] = useState('');
-  function addCard() {
-    setCardIsEditing(true);
-  }
-  async function handleAddCard() {
-    if (cardInputValue) {
-      await instance.post(`board/${params.boardId}/card`, {
-        title: cardInputValue,
-        list_id: list.id,
-        position: list.cards.length ? list.cards.length + 1 : 1,
-      });
-      getData();
-    }
-  }
+  const [cardsState, setCardsState] = useState(cards);
+  const [listState, setListState] = useState(list);
+
+  useEffect(() => {
+    setListState(list);
+    setCardsState(cards);
+  }, [cards, list]);
+
   return (
     <div className="list">
-      <h5 className="list__title">{list.title}</h5>
-      {cards.map(function (item) {
-        return <Card title={item.title} list={list} card={item}></Card>;
+      <h5 className="list__title">{listState.title}</h5>
+      {cardsState.map(function (item) {
+        return (
+          <Card key={item.id} title={item.title} listState={listState} setListState={setListState} card={item}></Card>
+        );
       })}
-      {/* вынести в отдельный компонент */}
-      <div>
-        {cardIsEditing ? (
-          <>
-            <input type="text" value={cardInputValue} onChange={(event) => setCardInputValue(event.target.value)} />
-            <button onClick={() => handleAddCard()}>Add</button>
-            <button onClick={(event) => setCardIsEditing(false)}>✖</button>
-          </>
-        ) : (
-          <button
-            onClick={(event) => addCard()}
-            type="button"
-            style={{ color: 'grey', border: 'none', cursor: 'pointer' }}
-          >
-            + Add new card
-          </button>
-        )}
-      </div>
+      <AddCardButton
+        listState={listState}
+        cardsState={cardsState}
+        setCardsState={setCardsState}
+        getData={getData}
+        params={params}
+      ></AddCardButton>
     </div>
   );
 };

@@ -8,6 +8,7 @@ import AddListButton from '../AddListButton/AddListButton';
 import axios from '../../../../api/request';
 import Loader from '../../../../UI/Loader/Loader';
 import { ErrorBoundary, useErrorBoundary } from 'react-error-boundary';
+import Smth from './Smth/Smth';
 // { board }: { board: { title: string; lists: any[] } } ??
 const Board = function () {
   const [board, setBoard] = useState<any>();
@@ -51,10 +52,6 @@ const Board = function () {
   useEffect(() => {
     getData();
   }, []);
-  // // Magic!!!!
-  // if (!board) {
-  //   return <Loader></Loader>;
-  // }
   return (
     <div>
       {board ? (
@@ -72,7 +69,7 @@ const Board = function () {
                 {board.lists.map(function (list: any) {
                   return <List getData={getData} cards={list.cards} list={list} params={params}></List>;
                 })}
-                <AddListButton params={params} board={board} getData={getData}></AddListButton>
+                <AddListButton params={params} board={board} setBoard={setBoard} getData={getData}></AddListButton>
               </div>
             </main>
           </body>
