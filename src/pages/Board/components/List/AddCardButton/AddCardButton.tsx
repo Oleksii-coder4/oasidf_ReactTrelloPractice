@@ -7,29 +7,38 @@ interface addCardButton {
   getData: any;
   params: any;
 }
-
+// TODO: refactor params to boardId only
+//
 const AddCardButton = function ({ listState, cardsState, setCardsState, getData, params }: addCardButton) {
   const [cardIsEditing, setCardIsEditing] = useState(false);
   const [cardInputValue, setCardInputValue] = useState('');
-  const [cardPositionToSend, setCardPositionToSend] = useState('');
+  const [cardPositionToSend, setCardPositionToSend] = useState(0);
   useEffect(() => {
     setCardPositionToSend(listState.cards.length);
-  }, [listState]);
+  }, []);
   async function handleAddCard() {
     if (cardInputValue) {
+      const tempId = +new Date();
       setCardsState([
         ...cardsState,
         {
+          id: tempId,
           title: cardInputValue,
         },
       ]);
-      await instance.post(`board/${params.boardId}/card`, {
-        title: cardInputValue,
-        list_id: listState.id,
-        position: cardPositionToSend ? cardPositionToSend + 1 : 1,
-      });
-      setCardPositionToSend(cardPositionToSend + 1);
-      getData();
+      setCardPositionToSend((oldPos) => oldPos++);
+      const newPosition = cardPositionToSend + 1;
+      instance
+        .post(`board/${params.boardId}/card`, {
+          title: cardInputValue,
+          list_id: listState.id,
+          position: newPosition ? newPosition : 1,
+        })
+        .then(() => {
+          getData();
+        })
+        .catch((err) => {});
+      console.log();
     }
   }
 

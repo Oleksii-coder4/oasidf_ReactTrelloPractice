@@ -21,6 +21,7 @@ const Board = function () {
       let response = await instance.get(`/board/${params.boardId}`);
       const boardData = await JSON.parse(JSON.stringify(response));
       setBoard(boardData);
+      // console.log(boardData.lists[0].cards);
     } catch (error) {
       setError(error);
       console.error('error' + error);
@@ -52,6 +53,10 @@ const Board = function () {
   useEffect(() => {
     getData();
   }, []);
+
+  // if (!board) {
+  //   retur
+  // }
   return (
     <div>
       {board ? (
