@@ -5,40 +5,43 @@ interface addCardButton {
   cardsState: any;
   setCardsState: any;
   getData: any;
-  params: any;
+  boardId: any;
 }
 // TODO: refactor params to boardId only
 //
-const AddCardButton = function ({ listState, cardsState, setCardsState, getData, params }: addCardButton) {
+const AddCardButton = function ({ listState, cardsState, setCardsState, getData, boardId }: addCardButton) {
   const [cardIsEditing, setCardIsEditing] = useState(false);
   const [cardInputValue, setCardInputValue] = useState('');
   const [cardPositionToSend, setCardPositionToSend] = useState(0);
-  useEffect(() => {
-    setCardPositionToSend(listState.cards.length);
-  }, []);
   async function handleAddCard() {
-    if (cardInputValue) {
+    let filterCards: object[] = [];
+    if (cardInputValue.trim()) {
+      // you need not to use getData, and to use a variable there instead of the card
       const tempId = +new Date();
+      const newPosition = cardsState.length + 1;
       setCardsState([
         ...cardsState,
         {
-          id: tempId,
+          id: `temp${tempId}`,
           title: cardInputValue,
+          position: newPosition ? newPosition : 1,
         },
       ]);
-      setCardPositionToSend((oldPos) => oldPos++);
-      const newPosition = cardPositionToSend + 1;
+      let array = cardsState;
+      // filterCards = cardsState.filter((item: any) => {
+      //   if (typeof item.id === 'string' && item.id.startsWith('temp')) {
+      //     return item;
+      //   }
+      // });
       instance
-        .post(`board/${params.boardId}/card`, {
+        .post(`board/${boardId}/card`, {
           title: cardInputValue,
           list_id: listState.id,
           position: newPosition ? newPosition : 1,
         })
-        .then(() => {
-          getData();
-        })
+        .then(() => {})
+        // try to add border to elements that don't send
         .catch((err) => {});
-      console.log();
     }
   }
 

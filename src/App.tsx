@@ -13,6 +13,9 @@ import FallbackError from './UI/FallbackError/FallbackError';
 // dotenv.config();
 
 // описать нормально сигнатуры typescript
+// убрать body
+// добавить trim в проверку отправки title
+
 function App() {
   return (
     <ErrorBoundary FallbackComponent={FallbackError}>

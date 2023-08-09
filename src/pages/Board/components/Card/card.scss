@@ -6,9 +6,16 @@
   background-color: whitesmoke;
   border-radius: 2px;
   cursor: grab;
+  margin: 0;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  min-width: 225px;
+  max-width: 225px;
+}
+.error_border {
+  border: 2px solid darkred;
 }
 .card__text {
+  pointer-events: none;
   margin: 10px;
   font-size: 14px;
 }

@@ -15,7 +15,9 @@
   overflow: auto;
   flex-direction: column;
 }
-
+.wrapper {
+  max-height: 90vh;
+}
 .list__title {
   user-select: none;
   letter-spacing: 1.5px;

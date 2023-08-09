@@ -4,68 +4,88 @@ import Card from '../Card/Card';
 import './css/list.css';
 import instance from '../../../../api/request';
 import AddCardButton from './AddCardButton/AddCardButton';
-import { relative } from 'path';
 interface list {
   cards: ICard[];
   list: any;
-  params: any;
+  boardId: any;
   getData: () => void;
+  // setCurrentCard: any;
+  // setIsDragStart: any;
+  // setXPosition: any;
+  // setYPosition: any;
+  // isMoveStart: any;
 }
-const List = function ({ cards, list, params, getData }: list) {
-  const [cardsState, setCardsState] = useState(cards);
+const List = function ({
+  getData,
+  cards,
+  list,
+  boardId, // setCurrentCard,
+  // setIsDragStart,
+} // setXPosition,
+// setYPosition,
+// isMoveStart,
+: list) {
+  const [listCards, setListCards] = useState(cards);
   const [listState, setListState] = useState(list);
-  const [dropAreas, setDropAreas] = useState<any>([]); //useless
   useEffect(() => {
     setListState(list);
-    setCardsState(cards);
-    setDropAreas(JSON.parse(JSON.stringify(cards)));
+    setListCards(cards);
   }, [cards, list]);
+  // function handleMouseDown(event: any, card: any) {
+  //   const xPosition = event.clientX - event.target.getBoundingClientRect().left;
+  //   const yPosition = event.clientY - event.target.getBoundingClientRect().top;
+  //   setCurrentCard(card);
+  //   setXPosition(xPosition);
+  //   setYPosition(yPosition);
+  //   setIsDragStart(true);
+  // }
   return (
-    <div className="list" onClick={() => console.log(dropAreas)}>
-      <h5 className="list__title">{listState.title}</h5>
-      {cardsState
-        .sort((secondCard, firstCard) => {
-          return secondCard.position - firstCard.position;
-        })
-        .map(function (card) {
-          return (
-            <div>
-              <Card
-                key={card.id}
-                title={card.title}
-                listState={listState}
-                setListState={setListState}
-                card={card}
-                cardsState={cardsState}
-                setCardsState={setCardsState}
-              ></Card>
-              <div
-                style={{
-                  display: 'flex',
-                  position: 'relative',
-                  zIndex: '2',
-                  // some magic
-                  // pointerEvents: 'none',
-                  padding: '8px 0',
-                  opacity: 0.4,
-                  alignItems: 'center',
-                  maxHeight: '40px',
-                  background: 'black',
-                  borderRadius: '2px',
-                }}
-              >
-                some div
-              </div>
-            </div>
-          );
-        })}
-      <AddCardButton
-        listState={listState}
-        cardsState={cardsState}
-        setCardsState={setCardsState}
-        getData={getData}
-        params={params}
-      ></AddCardButton>
+    <div className="wrapper">
+      <div className="list">
+        <h5 className="list__title">{listState.title}</h5>
+        {listCards
+          .sort((secondCard, firstCard) => {
+            return secondCard.position - firstCard.position;
+          })
+          .map(function (card: any, index: any) {
+            if (card.isPlaceholder) {
+              return (
+                <Card
+                  key={card.id}
+                  title={card.title}
+                  listState={listState}
+                  setListState={setListState}
+                  card={card}
+                  listCards={listCards}
+                  setListCards={setListCards}
+                  styles={{ padding: '15px', background: 'grey', border: '1px solid black', pointerEvents: 'none' }}
+                />
+              );
+            } else {
+              return (
+                <Card
+                  key={card.id}
+                  title={card.title}
+                  listState={listState}
+                  setListState={setListState}
+                  card={card}
+                  listCards={listCards}
+                  setListCards={setListCards}
+                  styles={{}}
+                  // handleMouseDown={handleMouseDown}
+                  // isMoveStart={isMoveStart}
+                ></Card>
+              );
+            }
+          })}
+        <AddCardButton
+          listState={listState}
+          cardsState={listCards}
+          setCardsState={setListCards}
+          getData={getData}
+          boardId={boardId}
+        ></AddCardButton>
+      </div>
     </div>
   );
 };

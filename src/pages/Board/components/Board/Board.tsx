@@ -13,28 +13,33 @@ import Smth from './Smth/Smth';
 const Board = function () {
   const [board, setBoard] = useState<any>();
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<any>();
+  const [currentCard, setCurrentCard] = useState({});
+  const [xPosition, setXPosition] = useState(0);
+  const [yPosition, setYPosition] = useState(0);
+  const [isDragStart, setIsDragStart] = useState(false);
+  const [isMoveStart, setIsMoveStart] = useState(false);
   const params = useParams();
   const { showBoundary } = useErrorBoundary();
+  //-------------------------------------------
   async function getData() {
     try {
       let response = await instance.get(`/board/${params.boardId}`);
       const boardData = await JSON.parse(JSON.stringify(response));
       setBoard(boardData);
-      // console.log(boardData.lists[0].cards);
     } catch (error) {
-      setError(error);
       console.error('error' + error);
       showBoundary(error);
     }
   }
+  useEffect(() => {
+    getData();
+  }, []);
   instance.interceptors.request.use(
     (config) => {
       setIsLoading(true);
       return config;
     },
     (error) => {
-      setError(error);
       setIsLoading(false);
       return Promise.reject(error);
     }
@@ -45,43 +50,64 @@ const Board = function () {
       return response;
     },
     (error) => {
-      setError(error);
       setIsLoading(false);
       return Promise.reject(error);
     }
   );
-  useEffect(() => {
-    getData();
-  }, []);
-
-  // if (!board) {
-  //   retur
+  // function mouseMoveHandler(event: any, currentCard: any, xPosition: any, yPosition: any) {
+  //   console.log(currentCard + 'current');
+  //   if (isDragStart && currentCard) {
+  //     if (!isMoveStart) {
+  //       setIsMoveStart(true);
+  //     }
+  //     currentCard.style.border = '1px solid black';
+  //     currentCard.style.position = 'absolute';
+  //     currentCard.style.zIndex = 1000;
+  //     moveCard(xPosition, yPosition, currentCard, event);
+  //   }
   // }
+  // function moveCard(xPositionCursor: any, yPositionCursor: any, currentCard: any, event: any) {
+  //   currentCard.style.left = event.clientX - xPositionCursor + 'px';
+  //   currentCard.style.top = event.clientY - yPositionCursor + 'px';
+  // }
+  if (!board) {
+    return <Loader></Loader>;
+  }
   return (
-    <div>
-      {board ? (
-        <div className={classes.board} style={{ background: board.custom?.background }}>
-          <header className={classes.header}>
-            <nav className={classes.header__nav}>
-              <Link to="/" className={classes.header__exit}>{`🏠`}</Link>
-            </nav>
-            <p style={{ fontWeight: 200 }}>Page Id {params.boardId}</p>
-            <TitleInput board={board} params={params} getData={getData}></TitleInput>
-          </header>
-          <body>
-            <main>
-              <div className={classes.board_lists}>
-                {board.lists.map(function (list: any) {
-                  return <List getData={getData} cards={list.cards} list={list} params={params}></List>;
-                })}
-                <AddListButton params={params} board={board} setBoard={setBoard} getData={getData}></AddListButton>
-              </div>
-            </main>
-          </body>
-        </div>
-      ) : (
-        <Loader></Loader>
-      )}
+    <div
+    // onMouseMove={(event) => {
+    //   mouseMoveHandler(event, currentCard, xPosition, yPosition);
+    // }}
+    >
+      <div className={classes.board} style={{ background: board.custom?.background }}>
+        <header className={classes.header}>
+          <nav className={classes.header__nav}>
+            <Link to="/" className={classes.header__exit}>{`🏠`}</Link>
+          </nav>
+          <p style={{ fontWeight: 200 }}>Page Id {params.boardId}</p>
+          <TitleInput board={board} params={params} getData={getData}></TitleInput>
+        </header>
+        <main style={{ minHeight: '85vh' }}>
+          <div className={classes.board_lists}>
+            {board.lists.map(function (list: any) {
+              return (
+                <List
+                  getData={getData}
+                  cards={list.cards}
+                  list={list}
+                  boardId={params.boardId}
+                  // setCurrentCard={setCurrentCard} // List
+                  // setIsDragStart={setIsDragStart} // in List
+                  // setXPosition={setXPosition} // in List
+                  // setYPosition={setYPosition} // in List
+                  // isMoveStart={isMoveStart} // for Card component
+                ></List>
+              );
+            })}
+            <AddListButton params={params} board={board} setBoard={setBoard} getData={getData}></AddListButton>
+          </div>
+        </main>
+      </div>
     </div>
   );
 };

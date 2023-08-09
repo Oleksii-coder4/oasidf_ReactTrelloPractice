@@ -83,6 +83,10 @@ select {
   flex-direction: column;
 }
 
+.wrapper {
+  max-height: 90vh;
+}
+
 .list__title {
   -webkit-user-select: none;
      -moz-user-select: none;
