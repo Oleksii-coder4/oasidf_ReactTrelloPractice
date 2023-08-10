@@ -92,9 +92,11 @@ const Board = function () {
             {board.lists.map(function (list: any) {
               return (
                 <List
+                  key={list.id}
                   getData={getData}
                   cards={list.cards}
                   list={list}
+                  lists={board.lists}
                   boardId={params.boardId}
                   // setCurrentCard={setCurrentCard} // List
                   // setIsDragStart={setIsDragStart} // in List

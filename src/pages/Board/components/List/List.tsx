@@ -8,6 +8,7 @@ interface list {
   cards: ICard[];
   list: any;
   boardId: any;
+  lists: any;
   getData: () => void;
   // setCurrentCard: any;
   // setIsDragStart: any;
@@ -19,9 +20,10 @@ const List = function ({
   getData,
   cards,
   list,
+  lists,
   boardId, // setCurrentCard,
-  // setIsDragStart,
-} // setXPosition,
+  // setXPosition,
+} // setIsDragStart,
 // setYPosition,
 // isMoveStart,
 : list) {
@@ -41,42 +43,30 @@ const List = function ({
   // }
   return (
     <div className="wrapper">
-      <div className="list">
+      <div className="list" data-list-id={list.id}>
         <h5 className="list__title">{listState.title}</h5>
         {listCards
           .sort((secondCard, firstCard) => {
             return secondCard.position - firstCard.position;
           })
           .map(function (card: any, index: any) {
-            if (card.isPlaceholder) {
-              return (
-                <Card
-                  key={card.id}
-                  title={card.title}
-                  listState={listState}
-                  setListState={setListState}
-                  card={card}
-                  listCards={listCards}
-                  setListCards={setListCards}
-                  styles={{ padding: '15px', background: 'grey', border: '1px solid black', pointerEvents: 'none' }}
-                />
-              );
-            } else {
-              return (
-                <Card
-                  key={card.id}
-                  title={card.title}
-                  listState={listState}
-                  setListState={setListState}
-                  card={card}
-                  listCards={listCards}
-                  setListCards={setListCards}
-                  styles={{}}
-                  // handleMouseDown={handleMouseDown}
-                  // isMoveStart={isMoveStart}
-                ></Card>
-              );
-            }
+            return (
+              <Card
+                key={card.id}
+                title={card.title}
+                listState={listState}
+                setListState={setListState}
+                card={card}
+                listCards={listCards}
+                lists={lists}
+                setListCards={setListCards}
+                styles={
+                  card.isPlaceholder
+                    ? { padding: '15px', background: 'grey', border: '1px solid black', pointerEvents: 'none' }
+                    : {}
+                }
+              />
+            );
           })}
         <AddCardButton
           listState={listState}

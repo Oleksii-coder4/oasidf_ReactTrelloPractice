@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import './css/card.css';
 import CardsPlaceholder from './CardsPlaceholder/CardsPlaceholder';
 import ReactDOM from 'react-dom';
@@ -8,6 +8,7 @@ interface card {
   setListState: any;
   card: any;
   listCards: any;
+  lists: any;
   setListCards: any;
   styles: any;
   // handleMouseDown: any;
@@ -21,37 +22,136 @@ interface card {
 // let elementBelow: any;
 // let currentDroppable: any;
 //--------------
+
+// placeholderId const 1!!!!!!!!!!!!!!!!!!!!!!!!!!
+const PLACEHOLDER_ID: number = -100;
 let movingElement: any;
 let currentCard: any;
-let placeholder: any;
-let isDragStart: any;
 let xPosition: any;
 let yPosition: any;
-let newList: any;
-let cardBelow: any;
-const Card = function ({ title, listState, setListState, card, listCards, setListCards, styles }: card) {
-  const [someState, setSomeState] = useState(false);
-  const [isMouseDown, setIsMouseDown] = useState<boolean>(false);
+const Card = function ({ title, listState, setListState, card, listCards, lists, setListCards, styles }: card) {
+  const [isMouseDown, setIsmMouseDown] = useState(false);
+  const [isMouseMove, setIsMouseMove] = useState<boolean>(false);
+  const currentArrayRef = useRef<any>();
+  const spareArrayRef = useRef<any>();
+  const currentListRef = useRef<any>();
+  // const isMouseDownRef = useRef(false);
   useEffect(() => {
-    if (isMouseDown) {
-      document.addEventListener('mousemove', handleMouseMove);
-      movingElement.onmouseup = onMouseUpHandler;
+    if (!isMouseDown) {
+      return;
     }
+    console.log('here');
+    document.addEventListener('mousemove', handleMouseMove);
+    movingElement.onmouseup = handleMouseUp; // working only in this way (, onMouseUp don't work
     return () => {
       document.removeEventListener('mousemove', handleMouseMove);
-      document.removeEventListener('onmouseup', onMouseUpHandler);
     };
   }, [isMouseDown]);
-
   function mouseDownHandler(event: any) {
+    console.log('down');
+    setIsmMouseDown(true);
     event.preventDefault();
     movingElement = event.target;
-    console.log(movingElement);
     currentCard = card;
+    const droppableBelow = getElementBelow(movingElement);
+    currentListRef.current = droppableBelow.closest('.list');
     xPosition = event.clientX - event.target.getBoundingClientRect().left;
     yPosition = event.clientY - event.target.getBoundingClientRect().top;
-    setIsMouseDown(true); // set mouse down to provide addEventListener
+    console.log('addEvent');
   }
+  // v2
+  function handleMouseMove(event: any) {
+    event.preventDefault();
+    const droppableBelow = getElementBelow(movingElement);
+    if (!droppableBelow) return;
+    const listBelow = droppableBelow.closest('.list');
+    const cardBelow = droppableBelow.closest('.card');
+    let tempArray: any;
+    if (listBelow) {
+      console.log(listBelow);
+      const listBelowId = listBelow.getAttribute('data-list-id');
+      // one is a number another string
+      console.log('kra');
+      const currentListIndex = lists.findIndex((item: any) => item.id == listBelowId);
+      console.log('kra');
+      const currentListCards = lists[currentListIndex].cards;
+      tempArray = [...currentListCards];
+      console.log('tempArray');
+    }
+    // const tempArray = [...listCards];
+    // if (!isMouseMove) {
+    setIsMouseMove(true);
+    const currentMovingCardIndex = tempArray.findIndex((item: any) => item.id === currentCard.id);
+    const placeholder = {
+      id: PLACEHOLDER_ID,
+      position: tempArray[currentMovingCardIndex].position,
+      isPlaceholder: true,
+    };
+    tempArray.splice(currentMovingCardIndex, 0, placeholder);
+    spareArrayRef.current = tempArray;
+    setListCards(tempArray);
+    // }
+    moveCard(event);
+    // change list
+    // let cardBelow = droppableBelow;
+    // if (listBelow !== currentListRef.current) {
+    //   const listsArray = JSON.parse(JSON.stringify(lists));
+    //   const placeholderIndex = tempArray.findIndex((item) => {
+    //     return item.id === PLACEHOLDER_ID;
+    //   });
+    //   // remove placeholder from current list
+    //   tempArray.splice(placeholderIndex, 1);
+    //   const listId = listBelow.getAttribute('data-list-id');
+    //   const listBelowIndex = lists.findIndex((item: any) => {
+    //     return item.id == listId;
+    //   });
+    //   listsArray[listBelowIndex].cards.splice(0, 0, { id: PLACEHOLDER_ID, position: 1, isPlaceholder: true });
+    //   listsArray[listBelowIndex].cards.map((item: any, index: number) => {
+    //     if (item.id === PLACEHOLDER_ID) return item;
+    //     return item.position + 1;
+    //   });
+    //   // setlists
+    //   currentListRef.current = listBelow;
+    // }
+    if (!cardBelow) {
+      return;
+    }
+    const cardId = cardBelow.getAttribute('data-card-id');
+    const card = listCards.find((item: any) => {
+      return item.id == cardId;
+    });
+    if (!card) return;
+    if (PLACEHOLDER_ID == card.id) {
+      return;
+    }
+    const rect = cardBelow.getBoundingClientRect();
+    const yPosition = event.clientY - rect.top;
+    if (yPosition > rect.height) {
+      return;
+    }
+    // find index
+    const cardIndex = tempArray.findIndex((item: any) => {
+      return item.id === card.id;
+    });
+    const placeholderIndex = tempArray.findIndex((item: any) => {
+      return item.id === PLACEHOLDER_ID;
+    });
+    const movingElementIndex = tempArray.findIndex((item: any) => {
+      return item.id === currentCard.id;
+    });
+    const newPosition = tempArray[placeholderIndex].position;
+    tempArray[placeholderIndex].position = card.position;
+    tempArray[movingElementIndex].position = card.position;
+    tempArray[cardIndex].position = newPosition;
+    setListCards(tempArray);
+    currentArrayRef.current = tempArray;
+  }
+
+  function moveCard(event: any) {
+    movingElement.style.left = event.clientX - xPosition + 'px';
+    movingElement.style.top = event.clientY - yPosition + 'px';
+  }
+
   function getElementBelow(movingElement: any) {
     const rect = movingElement.getBoundingClientRect();
     let cords = {
@@ -59,271 +159,39 @@ const Card = function ({ title, listState, setListState, card, listCards, setLis
       left: rect.left + rect.width / 2,
     };
     movingElement.style.display = 'none';
-    let elementBelow = document.elementFromPoint(cords.left, cords.top);
+    let elementBelow: any = document.elementFromPoint(cords.left, cords.top);
     movingElement.style.display = 'flex';
     return elementBelow;
   }
-  // v2
-  function handleMouseMove(event: any) {
-    if (!isDragStart) {
-      isDragStart = true;
-      movingElement.style.position = 'absolute';
-      movingElement.style.zIndex = 1000;
-      let tempArray = JSON.parse(JSON.stringify(listCards));
-      let index = tempArray.findIndex((item: any) => {
-        return item.id === card.id;
-      });
-      placeholder = { id: tempArray[index].id + 1, position: tempArray[index].position, isPlaceholder: true };
-      tempArray.splice(index, 0, placeholder);
-      newList = tempArray;
-      setListCards(newList);
-    }
-    if (movingElement) {
-      moveCard(event);
-      cardBelow = getElementBelow(movingElement);
-      let droppableBelow: any;
-      if (cardBelow) {
-        droppableBelow = cardBelow.closest('.card');
-      }
-      let cardId: any;
-      let card: any;
-      if (droppableBelow) {
-        cardId = droppableBelow.getAttribute('data-card-id');
-        card = listCards.find((item: any) => {
-          return item.id == cardId;
-        });
-      }
-      if (!card) return;
-      if (card) {
-        event.preventDefault();
-        const rect = droppableBelow.getBoundingClientRect();
-        const xPosition = event.clientX - rect.left;
-        const yPosition = event.clientY - rect.top;
-        if (yPosition < rect.height) {
-          // one is number another string
-          if (placeholder.id != card.id) {
-            console.log(card);
-            let tempCard = JSON.parse(JSON.stringify(card));
-            let tempArray = JSON.parse(JSON.stringify(newList));
-            console.log('card');
-            console.log(card);
-            console.log(tempArray);
-            let cardIndex = tempArray.findIndex((item: any) => {
-              return item.id === tempCard.id;
-            });
-            console.log('start');
-            let placeholderIndex = tempArray.findIndex((item: any) => {
-              return item.id === placeholder.id;
-            });
-            let movingElementIndex = tempArray.findIndex((item: any) => {
-              return item.id === currentCard.id;
-            });
-            console.log('index +' + movingElementIndex);
-            // tempArray[cardIndex].position = tempArray[placeholderIndex].position;
-            // tempArray[placeholderIndex].position = tempCard.position;
-            // change position
-            const newPosition = tempArray[placeholderIndex].position;
-            tempArray[placeholderIndex].position = tempCard.position;
-            tempArray[movingElementIndex].position = tempCard.position;
-            tempArray[cardIndex].position = newPosition;
-            console.log(tempArray);
-            newList = tempArray;
-            setListCards(tempArray);
-          }
-        }
-      }
-    }
-  }
-  // v2
-  function moveCard(event: any) {
-    movingElement.style.left = event.clientX - xPosition + 'px';
-    movingElement.style.top = event.clientY - yPosition + 'px';
-  }
-
-  function onMouseUpHandler() {
-    console.log('up');
-    isDragStart = false;
-    setIsMouseDown(false);
-    movingElement = null;
+  function handleMouseUp(event: any) {
+    if (!spareArrayRef.current) return;
+    const spareArray = [...spareArrayRef.current];
+    setIsMouseMove(false);
+    setIsmMouseDown(false);
     document.removeEventListener('mousemove', handleMouseMove);
+    const placeholderIndex = spareArray.findIndex((item: any) => item.id === PLACEHOLDER_ID);
+    spareArray.splice(placeholderIndex, 1);
+    setListCards(spareArray);
   }
-  // const dragStartHandler = function (event: any, card: any, list: any) {
-  //   // // Create a custom drag image element (div)
-  //   // const dragImage = document.createElement('div');
-  //   // dragImage.textContent = 'Custom Drag Image'; // You can set any content you like
-  //   // dragImage.style.width = '100px';
-  //   // dragImage.style.height = '100px';
-  //   // dragImage.style.backgroundColor = 'lightblue';
-  //   // dragImage.style.cursor = 'grabbing'; // Set the cursor style while dragging
-  //   // // Set the custom drag image using the setDragImage method
-  //   // event.dataTransfer.setDragImage(dragImage, 0, 0);
-  //   // setCurrentCard(card);
-  //   // setCurrentList(list);
-  //   return false;
-  // };
-  // const dragOverHandler = function (event: any, card: any, list: any) {
-  //   event.preventDefault();
-  //   // if (event.target.className === 'card') {
-  //   //   const rect = event.card.getBoundingClientRect();
-  //   //   const yPosition = event.clientY - rect.top;
-  //   //   const cardHeight = rect.height;
-  //   //   if (yPosition < cardHeight / 2) {
-  //   //     setElementIsAbove(true);
-  //   //   } else if (yPosition > cardHeight / 2) {
-  //   //     setElementIsBelow(true);
-  //   //   }
-  //   // }
-  //   //----------------------------
-  //   if (movingElement) {
-  //     moveCard(xPosition, yPosition, event);
 
-  //     elementBelow = getElementBelow(movingElement);
-  //     if (!elementBelow) return;
-  //     let droppableBelow = elementBelow.closest('.card');
-  //     if (currentDroppable !== droppableBelow) {
-  //       currentDroppable = droppableBelow;
-  //       console.log(currentDroppable);
-  //       if (currentDroppable) {
-  //         if (isAbove(movingElement, currentDroppable)) {
-  //           // set new position
-  //           // let array = JSON.parse(JSON.stringify(cardsState));
-  //           // array.findIndex((item: any) => {
-  //           //   if (true) {
-  //           //   }
-  //           // });
-  //           setElementIsAbove(true);
-  //           // setCardsState({ ...cardsState });
-  //         } else {
-  //           setElementIsBelow(true);
-  //           //set new position
-  //         }
-  //       }
-  //     }
-  //   }
-  // };
-
-  // const dragLeaveHandler = function (event: any) {};
-  // const dragEndHandler = function (event: any) {};
-  // const dragDropHandler = function (event: any, card: any, list: any) {
-  //   event.preventDefault();
-  // };
-  // return (
-  //   <div>
-  //     {isDragStart && <CardsPlaceholder />}
-  //     {elementIsBelow && <CardsPlaceholder />}
-  //     <div
-  //       draggable={true}
-  //       onMouseDown={(event) => mouseDownHandler(event)}
-  //       onMouseUp={(event) => onMouseUpHandler()}
-  //       // style={{ position: 'relative' }}
-  //       className={`card`}
-  //       // style={{ position: 'relative', zIndex: '3', width: '100%', margin: '0' }}
-  //       // onMouseMove={(event) => mouseMoveHandler(event, currentCard, positions.xPosition, positions.yPosition)}
-  //       onDragStart={(event) => dragStartHandler(event, card, listState)}
-  //       onDragOver={(event) => dragOverHandler(event, card, listState)} //card list
-  //       // onDragLeave={(event) => dragLeaveHandler(event)}
-  //       // onDragStart={(event) => dragStartHandler(event, cardState, listState)}
-  //       // onDragEnd={(event) => dragEndHandler(event)}
-  //       // onDrop={(event) => dragDropHandler(event, cardState, listState)}
-  //     >
-  //       <p className="card__text">{title}</p>
-  //     </div>
-  //     {elementIsAbove && <CardsPlaceholder />}
-  //   </div>
-  // );
-  //-------------------------------------------------------------
   function handleDragStart(event: any, card: any, list: any) {
     event.preventDefault();
-    // event.preventDefault();
-    // movingElement = event.target;
-    // currentCard = card;
-    // xPosition = event.clientX - event.target.getBoundingClientRect().left;
-    // yPosition = event.clientY - event.target.getBoundingClientRect().top;
-    // // event.dataTransfer.setData('text/plain', JSON.stringify(currentCard));
-    // console.log(card);
-    // let tempArray = JSON.parse(JSON.stringify(cardsState));
-    // let index = tempArray.findIndex((item: any) => {
-    //   return item.id === card.id;
-    // });
-    // placeholder = { id: tempArray[index].id, position: tempArray[index].position };
-    // tempArray.splice(index, 0, placeholder);
-    // setCardsState(tempArray);
-    // return false;
+    return false;
   }
-  function handleDragOver(event: any, card: any) {
-    event.preventDefault();
-    console.log('dragOver');
-    cardBelow = card;
-    // event.preventDefault();
-    // const rect = event.target.getBoundingClientRect();
-    // const xPosition = event.clientX - rect.left;
-    // const yPosition = event.clientY - rect.top;
-    // if (yPosition < rect.height / 2) {
-    //   if (placeholder.id !== card.id) {
-    //     //above
-    //     let tempCard = JSON.parse(JSON.stringify(card));
-    //     let tempArray = JSON.parse(JSON.stringify(cardsState));
-    //     // replace positions
-    //     let cardIndex = tempArray.findIndex((item: any) => {
-    //       return item.id === tempCard.id;
-    //     });
-    //     let placeholderIndex = tempArray.findIndex((item: any) => {
-    //       return item.id === placeholder.id;
-    //     });
-    //     tempArray[cardIndex].position = tempArray[placeholderIndex].position;
-    //     tempArray[placeholderIndex].position = card.position;
-    //     console.log(tempArray);
-    //     setCardsState(tempArray);
-    //   }
-    // }
-  }
-  // function handleDragOver(event: any, card: any) {
-  //   console.log('dragOver');
-  //   event.preventDefault();
 
-  //   const rect = event.target.getBoundingClientRect();
-  //   const yPosition = event.clientY - rect.top;
-
-  //   // You can introduce a threshold to handle the case when the cursor is near the top/bottom of the card.
-  //   const threshold = rect.height / 2;
-  //   if (yPosition < threshold) {
-  //     // above
-  //     if (placeholder.id !== card.id) {
-  //       // Swap positions only when hovering over a different card
-  //       // let tempCard = { ...card };
-  //       let tempCard = JSON.parse(JSON.stringify(card));
-  //       // let tempArray = [...cardsState];
-  //       let tempArray = JSON.parse(JSON.stringify(cardsState));
-
-  //       const cardIndex = tempArray.findIndex((item: any) => item.id === tempCard.id);
-  //       const placeholderIndex = tempArray.findIndex((item: any) => item.id === placeholder.id);
-
-  //       // Swap positions in the array
-  //       // [tempArray[cardIndex].position, tempArray[placeholderIndex].position] = [
-  //       //   tempArray[placeholderIndex].position,
-  //       //   tempArray[cardIndex].position,
-  //       // ];
-  //       tempArray[cardIndex].position = tempArray[placeholderIndex].position;
-  //       tempArray[placeholderIndex].position = tempCard.position;
-  //       setCardsState(tempArray);
-  //     }
-  //   }
-  // }
-
+  const extraStyles = isMouseMove ? { position: 'absolute', zIndex: '1000' } : {};
   return (
-    // <div>
     <div
-      style={styles}
+      style={{ ...styles, ...extraStyles }}
       data-card-id={card.id}
-      className={`card`}
+      className="card"
       draggable={true}
       onDragStart={(event) => handleDragStart(event, card, listState)}
-      onDragOver={(event) => handleDragOver(event, card)}
-      onMouseDown={(event) => mouseDownHandler(event)}
+      onMouseDown={mouseDownHandler}
+      // onMouseUp={handleMouseUp}
     >
       <p className="card__text">{title}</p>
     </div>
-    // </div>
   );
 };
 export default Card;
