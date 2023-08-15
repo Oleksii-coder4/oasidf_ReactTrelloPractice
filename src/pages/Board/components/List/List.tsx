@@ -22,8 +22,8 @@ const List = function ({
   list,
   lists,
   boardId, // setCurrentCard,
-  // setXPosition,
-} // setIsDragStart,
+  // setIsDragStart,
+} // setXPosition,
 // setYPosition,
 // isMoveStart,
 : list) {
@@ -41,9 +41,10 @@ const List = function ({
   //   setYPosition(yPosition);
   //   setIsDragStart(true);
   // }
+  function handleMouseEnter(event: any) {}
   return (
     <div className="wrapper">
-      <div className="list" data-list-id={list.id}>
+      <div onMouseEnter={() => console.log('enter list')} className="list" data-list-id={list.id}>
         <h5 className="list__title">{listState.title}</h5>
         {listCards
           .sort((secondCard, firstCard) => {
