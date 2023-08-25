@@ -54,6 +54,7 @@ const Board = function () {
       return Promise.reject(error);
     }
   );
+  console.log(board);
   // function mouseMoveHandler(event: any, currentCard: any, xPosition: any, yPosition: any) {
   //   console.log(currentCard + 'current');
   //   if (isDragStart && currentCard) {
@@ -98,6 +99,8 @@ const Board = function () {
                   list={list}
                   lists={board.lists}
                   boardId={params.boardId}
+                  board={board}
+                  setBoard={setBoard}
                   // setCurrentCard={setCurrentCard} // List
                   // setIsDragStart={setIsDragStart} // in List
                   // setXPosition={setXPosition} // in List
