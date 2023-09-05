@@ -30,6 +30,7 @@ interface card {
 // let currentCard: any;
 // let xPosition: any;
 // let yPosition: any;
+let listStyles: any;
 const Card = function ({ title, card, styles, handleMouseDown }: card) {
   return (
     <div

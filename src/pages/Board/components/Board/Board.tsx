@@ -90,25 +90,27 @@ const Board = function () {
         </header>
         <main style={{ minHeight: '85vh' }}>
           <div className={classes.board_lists}>
-            {board.lists.map(function (list: any) {
-              return (
-                <List
-                  key={list.id}
-                  getData={getData}
-                  cards={list.cards}
-                  list={list}
-                  lists={board.lists}
-                  boardId={params.boardId}
-                  board={board}
-                  setBoard={setBoard}
-                  // setCurrentCard={setCurrentCard} // List
-                  // setIsDragStart={setIsDragStart} // in List
-                  // setXPosition={setXPosition} // in List
-                  // setYPosition={setYPosition} // in List
-                  // isMoveStart={isMoveStart} // for Card component
-                ></List>
-              );
-            })}
+            {board.lists
+              .sort((secondList: any, firstList: any) => secondList.position - firstList.position)
+              .map(function (list: any) {
+                return (
+                  <List
+                    key={list.id}
+                    getData={getData}
+                    cards={list.cards}
+                    list={list}
+                    lists={board.lists}
+                    boardId={params.boardId}
+                    board={board}
+                    setBoard={setBoard}
+                    // setCurrentCard={setCurrentCard} // List
+                    // setIsDragStart={setIsDragStart} // in List
+                    // setXPosition={setXPosition} // in List
+                    // setYPosition={setYPosition} // in List
+                    // isMoveStart={isMoveStart} // for Card component
+                  ></List>
+                );
+              })}
             <AddListButton params={params} board={board} setBoard={setBoard} getData={getData}></AddListButton>
           </div>
         </main>
