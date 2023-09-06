@@ -222,15 +222,15 @@ const List = function ({ getData, cards, list, lists, boardId, board, setBoard }
     }
 
     // to put it into backend
-    // const newCards = boardLists.reduce((accrue: any, item: any, index: number) => {
-    //   const listId = item.id;
-    //   item.cards.forEach((element: any) => {
-    //     const card = { id: element.id, position: element.position, list_id: listId };
-    //     accrue.push(card);
-    //   });
-    //   return accrue;
-    // }, []);
-    // instance.put(`/board/${boardId}/card`, newCards);
+    const newCards = boardLists.reduce((accrue: any, item: any, index: number) => {
+      const listId = item.id;
+      item.cards.forEach((element: any) => {
+        const card = { id: element.id, position: element.position, list_id: listId };
+        accrue.push(card);
+      });
+      return accrue;
+    }, []);
+    instance.put(`/board/${boardId}/card`, newCards);
     //reset
     isMouseMove = false;
     setIsmMouseDown(false);
@@ -250,53 +250,55 @@ const List = function ({ getData, cards, list, lists, boardId, board, setBoard }
     forsakenList = null;
     startList = null;
   }
-  // function handleListDragStart(event: any) {
-  //   event.dataTransfer.setData('text', JSON.stringify(listState));
-  // }
-  // function handleListDragLeave(event: any) {
-  //   if (event.relatedTarget === null || event.currentTarget.contains(event.relatedTarget)) return;
-  //   event.currentTarget.style.boxShadow = 'none';
-  // }
-  // function handleListDragOver(event: any) {
-  //   event.preventDefault();
-  //   if (event.target.className !== 'list') return;
-  //   event.target.style.boxShadow = 'rgb(38, 57, 77) 0px 20px 30px -10px';
-  // }
-  // function handleListDragEnd(event: any) {}
-  // function handleListDrop(event: any) {
-  //   event.preventDefault();
-  //   event.target.style.boxShadow = 'none';
-  //   const list = JSON.parse(event.dataTransfer.getData('text'));
-  //   let boardLists = JSON.parse(JSON.stringify(board.lists));
-  //   boardLists = boardLists.map((item: any) => {
-  //     if (item.id == list.id) {
-  //       item.position = listState.position;
-  //       return item;
-  //     }
-  //     if (item.id == listState.id) {
-  //       item.position = list.position;
-  //       return item;
-  //     }
-  //     return item;
-  //   });
-  //   setBoard({ ...board, lists: boardLists });
-  //   // post request to send to the backend
-  //   const newLists = boardLists.reduce((accrue: any, item: any, index: number) => {
-  //     const list = { id: item.id, position: item.position };
-  //     accrue.push(list);
-  //     return accrue;
-  //   }, []);
-  //   instance.put(`/board/${boardId}/list`, newLists);
-  // }
+  function handleListDragStart(event: any) {
+    event.dataTransfer.setData('text', JSON.stringify(listState));
+  }
+  function handleListDragLeave(event: any) {
+    if (event.relatedTarget === null || event.currentTarget.contains(event.relatedTarget)) return;
+    event.currentTarget.style.boxShadow = 'none';
+  }
+  function handleListDragOver(event: any) {
+    event.preventDefault();
+    if (event.target.className !== 'list') return;
+    event.target.style.boxShadow = 'rgb(38, 57, 77) 0px 20px 30px -10px';
+  }
+  function handleListDragEnd(event: any) {}
+  function handleListDrop(event: any) {
+    event.preventDefault();
+    event.target.style.boxShadow = 'none';
+    const list = JSON.parse(event.dataTransfer.getData('text'));
+    // fix this, we need update our boardLists that is
+    boardLists = boardLists.map((item: any) => {
+      if (item.id == list.id) {
+        item.position = listState.position;
+        console.log(JSON.parse(JSON.stringify(listState)));
+        return item;
+      }
+      if (item.id == listState.id) {
+        item.position = list.position;
+        return item;
+      }
+      return item;
+    });
+    // this react magic, the board didn't want to update the state, that is why the logic was kra(, and to prevent updating state I use json
+    setBoard({ ...board, lists: JSON.parse(JSON.stringify(boardLists)) });
+    // post request to send to the backend
+    const newLists = boardLists.reduce((accrue: any, item: any, index: number) => {
+      const list = { id: item.id, position: item.position };
+      accrue.push(list);
+      return accrue;
+    }, []);
+    instance.put(`/board/${boardId}/list`, newLists);
+  }
   return (
     <div className="wrapper">
       <div
-        // draggable
-        // onDragStart={(event) => handleListDragStart(event)}
-        // onDragLeave={(event) => handleListDragLeave(event)}
-        // onDragOver={(event) => handleListDragOver(event)}
-        // onDragEnd={(event) => handleListDragEnd(event)}
-        // onDrop={(event) => handleListDrop(event)}
+        draggable
+        onDragStart={(event) => handleListDragStart(event)}
+        onDragLeave={(event) => handleListDragLeave(event)}
+        onDragOver={(event) => handleListDragOver(event)}
+        onDragEnd={(event) => handleListDragEnd(event)}
+        onDrop={(event) => handleListDrop(event)}
         onMouseMove={handleMouseMoveOnList}
         onMouseLeave={handleMouseLeave}
         onMouseEnter={handleMouseEnter}
