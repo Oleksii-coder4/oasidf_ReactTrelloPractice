@@ -8,6 +8,7 @@ import { act } from 'react-dom/test-utils';
 import classes from './css/home.module.css';
 import CreateBoard from '../../CreateBoard/CreateBoard';
 import Loader from '../../../../UI/Loader/Loader';
+import { useErrorBoundary } from 'react-error-boundary';
 interface board {
   id: number;
   title: string;
@@ -16,10 +17,10 @@ interface board {
   };
 }
 const Home = function () {
-  //get boards
   const [boards, setBoards] = useState<any>();
   //for modal
   const [active, setActive] = useState(false);
+  const { showBoundary } = useErrorBoundary();
   async function getData() {
     try {
       let response: any = await instance.get('/board');
@@ -27,6 +28,7 @@ const Home = function () {
       setBoards(response.boards);
     } catch (error) {
       console.log(error);
+      showBoundary(error);
     }
   }
   useEffect(() => {
@@ -36,20 +38,20 @@ const Home = function () {
     <div>
       {boards ? (
         <div>
-          <body className={classes.body}>
-            <header className={classes.header}>
+          <div className={classes.body}>
+            <div className={classes.header}>
               <h1 className={classes.header__title}>Home Page</h1>
-            </header>
-            <main className={classes.home}>
+            </div>
+            <div className={classes.home}>
               <section className={classes.home__wrapper}>
                 <button className={classes.home__add_button} onClick={(event) => setActive(true)}>
                   Make new board
                 </button>
                 <CreateBoard active={active} setActive={setActive} onCardCreated={getData}></CreateBoard>
                 {boards.length > 0 ? (
-                  boards.map(function (board: any) {
+                  boards.map(function (board: any, index: number) {
                     return (
-                      <Link to={`board/${board.id}`} style={{ textDecoration: 'none' }}>
+                      <Link key={board.id} to={`board/${board.id}`} style={{ textDecoration: 'none' }}>
                         <HomeBoard
                           key={board.id}
                           id={board.id}
@@ -63,8 +65,8 @@ const Home = function () {
                   <h1 style={{ color: 'black' }}>Нема бордів</h1>
                 )}
               </section>
-            </main>
-          </body>
+            </div>
+          </div>
         </div>
       ) : (
         <Loader></Loader>

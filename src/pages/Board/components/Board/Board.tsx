@@ -8,19 +8,15 @@ import AddListButton from '../AddListButton/AddListButton';
 import axios from '../../../../api/request';
 import Loader from '../../../../UI/Loader/Loader';
 import { ErrorBoundary, useErrorBoundary } from 'react-error-boundary';
-import Smth from './Smth/Smth';
+import CardModal from './CardModal/CardModal';
+import Modal from '../../../../UI/Modal/Modal';
 // { board }: { board: { title: string; lists: any[] } } ??
 const Board = function () {
   const [board, setBoard] = useState<any>();
   const [isLoading, setIsLoading] = useState(false);
-  const [currentCard, setCurrentCard] = useState({});
-  const [xPosition, setXPosition] = useState(0);
-  const [yPosition, setYPosition] = useState(0);
-  const [isDragStart, setIsDragStart] = useState(false);
-  const [isMoveStart, setIsMoveStart] = useState(false);
   const params = useParams();
   const { showBoundary } = useErrorBoundary();
-  //-------------------------------------------
+
   async function getData() {
     try {
       let response = await instance.get(`/board/${params.boardId}`);
@@ -54,32 +50,11 @@ const Board = function () {
       return Promise.reject(error);
     }
   );
-  console.log(board);
-  // function mouseMoveHandler(event: any, currentCard: any, xPosition: any, yPosition: any) {
-  //   console.log(currentCard + 'current');
-  //   if (isDragStart && currentCard) {
-  //     if (!isMoveStart) {
-  //       setIsMoveStart(true);
-  //     }
-  //     currentCard.style.border = '1px solid black';
-  //     currentCard.style.position = 'absolute';
-  //     currentCard.style.zIndex = 1000;
-  //     moveCard(xPosition, yPosition, currentCard, event);
-  //   }
-  // }
-  // function moveCard(xPositionCursor: any, yPositionCursor: any, currentCard: any, event: any) {
-  //   currentCard.style.left = event.clientX - xPositionCursor + 'px';
-  //   currentCard.style.top = event.clientY - yPositionCursor + 'px';
-  // }
   if (!board) {
     return <Loader></Loader>;
   }
   return (
-    <div
-    // onMouseMove={(event) => {
-    //   mouseMoveHandler(event, currentCard, xPosition, yPosition);
-    // }}
-    >
+    <div>
       <div className={classes.board} style={{ background: board.custom?.background }}>
         <header className={classes.header}>
           <nav className={classes.header__nav}>
@@ -88,7 +63,7 @@ const Board = function () {
           <p style={{ fontWeight: 200 }}>Page Id {params.boardId}</p>
           <TitleInput board={board} params={params} getData={getData}></TitleInput>
         </header>
-        <main style={{ minHeight: '85vh' }}>
+        <div style={{ minHeight: '85vh' }}>
           <div className={classes.board_lists}>
             {board.lists
               .sort((secondList: any, firstList: any) => secondList.position - firstList.position)
@@ -103,17 +78,13 @@ const Board = function () {
                     boardId={params.boardId}
                     board={board}
                     setBoard={setBoard}
-                    // setCurrentCard={setCurrentCard} // List
-                    // setIsDragStart={setIsDragStart} // in List
-                    // setXPosition={setXPosition} // in List
-                    // setYPosition={setYPosition} // in List
-                    // isMoveStart={isMoveStart} // for Card component
                   ></List>
                 );
               })}
             <AddListButton params={params} board={board} setBoard={setBoard} getData={getData}></AddListButton>
           </div>
-        </main>
+        </div>
+        <CardModal></CardModal>
       </div>
     </div>
   );

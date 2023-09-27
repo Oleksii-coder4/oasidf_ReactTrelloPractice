@@ -1,0 +1,68 @@
+.modal {
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0;
+  pointer-events: none;
+  background: rgba(40, 46, 51, 0.7);
+}
+
+.active {
+  opacity: 1;
+  pointer-events: all;
+}
+.modal__content {
+  border: 1px solid #000;
+  border-radius: 10px;
+  padding: 10px;
+  margin: 20px 0;
+  background-color: dimgray;
+}
+.modal__text {
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  line-height: 20px;
+  text-align: center;
+  color: #fff;
+  padding: 5px;
+  margin: 10px 0;
+}
+
+.modal__title {
+  font-family: 'Comic Sans MS', cursive;
+  font-size: 20px;
+  line-height: 30px;
+  text-align: center;
+  color: wheat;
+  padding: 5px;
+  margin: 10px 0;
+}
+
+.modal__button {
+  font-family: 'Arial', sans-serif;
+  font-size: 12px;
+  font-weight: bold;
+  text-align: center;
+  color: #fff;
+  background-color: #000;
+  border: none;
+  border-radius: 10px;
+  padding: 5px 20px;
+  margin: 10px 0;
+  transition: all 0.4s ease;
+
+  &:hover {
+    background-color: #fff;
+    color: #000;
+  }
+
+  &:active {
+    background-color: #ccc;
+    color: #000;
+  }
+}

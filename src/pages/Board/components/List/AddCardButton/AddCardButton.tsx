@@ -22,7 +22,7 @@ const AddCardButton = function ({ listState, cardsState, setCardsState, getData,
       setCardsState([
         ...cardsState,
         {
-          id: `temp${tempId}`,
+          id: tempId,
           title: cardInputValue,
           position: newPosition ? newPosition : 1,
         },

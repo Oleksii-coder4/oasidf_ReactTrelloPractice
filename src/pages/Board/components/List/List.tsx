@@ -68,7 +68,8 @@ const List = function ({ getData, cards, list, lists, boardId, board, setBoard }
   function handleMouseMove(event: any) {
     event.preventDefault();
     moveCard(event);
-    if (!isMouseMove) {
+
+    if (!isMouseMove && (event.movementX > 2 || event.movementY > 2)) {
       isMouseMove = true;
       const droppableBelow = getElementBelow(movingElement);
       if (!droppableBelow) return;
@@ -89,6 +90,9 @@ const List = function ({ getData, cards, list, lists, boardId, board, setBoard }
       setListCards(JSON.parse(JSON.stringify(tempArray)));
       setListState({ ...listState, cards: [...tempArray] });
     }
+    // if (!isMouseMove) {
+    //   isMouseMove = true;
+    // }
   }
 
   function handleMouseLeave(event: any) {
@@ -237,7 +241,7 @@ const List = function ({ getData, cards, list, lists, boardId, board, setBoard }
     document.removeEventListener('mousemove', handleMouseMove);
     document.removeEventListener('mouseup', handleMouseUp);
     movingElement.style.position = 'unset';
-    movingElement.style.zIndex = '1';
+    movingElement.style.zIndex = '0';
     movingElement.style.pointerEvents = 'all';
     movingElement.style.transform = 'rotate(0deg)';
     movingElement.style.boxShadow = 'none';

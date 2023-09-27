@@ -9,13 +9,10 @@ import { api } from './common/constants';
 import axios from 'axios';
 import { ErrorBoundary } from 'react-error-boundary';
 import FallbackError from './UI/FallbackError/FallbackError';
-// import dotenv from 'dotenv';
-// dotenv.config();
 
+// TODO
 // описать нормально сигнатуры typescript
 // убрать body
-// добавить trim в проверку отправки title
-
 function App() {
   return (
     <ErrorBoundary FallbackComponent={FallbackError}>
