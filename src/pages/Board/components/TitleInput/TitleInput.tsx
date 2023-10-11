@@ -1,25 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import classes from '../Board/css/board.module.css';
 import instance from '../../../../api/request';
-const TitleInput = function ({ board, params, getData }: any) {
+const TitleInput = function ({ board, boardId }: any) {
   const [isEditing, setIsEditing] = useState(false);
   const [titleInputValue, setTitleInputValue] = useState(board.title);
   async function handleInputBlur(event: any) {
-    if (titleInputValue) {
-      await instance.put(`/board/${params.boardId}`, {
+    if (titleInputValue.trim()) {
+      await instance.put(`/board/${boardId}`, {
         title: titleInputValue,
       });
-      getData();
       setIsEditing(false);
     }
   }
   // trim
   async function handleInputKeyDown(event: any) {
     if (event.key === 'Enter' && titleInputValue) {
-      await instance.put(`/board/${params.boardId}`, {
+      await instance.put(`/board/${boardId}`, {
         title: titleInputValue,
       });
-      getData();
       setIsEditing(false);
     }
   }
@@ -30,6 +28,7 @@ const TitleInput = function ({ board, params, getData }: any) {
     <div className={classes.header__title}>
       {isEditing ? (
         <input
+          autoFocus
           className={classes.title_input}
           type="text"
           value={titleInputValue}

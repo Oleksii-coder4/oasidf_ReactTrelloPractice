@@ -1,7 +1,8 @@
 import React, { ReactNode, useEffect, useState } from 'react';
 import Modal from '../../../UI/Modal/Modal';
 import instance from '../../../api/request';
-import './css/createBoard.css';
+import classes from '../components/Home/css/home.module.css';
+// import './css/createBoard.css';
 interface createBoard {
   active: boolean;
   setActive: any;
@@ -15,7 +16,6 @@ const CreateBoard = function ({ active, setActive, onCardCreated }: createBoard)
     { background: 'linear-gradient(to right, #fffbd5, #b20a2c)' },
     { background: 'linear-gradient(to right, #2c3e50, #4ca1af)' },
   ];
-  //   form states
   const [selectedBackground, setSelectedBackground] = useState('rgb(0, 113, 191)');
   const [inputValue, setInputValue] = useState('');
   const addBoard = async function (event: any) {
@@ -29,7 +29,6 @@ const CreateBoard = function ({ active, setActive, onCardCreated }: createBoard)
         },
       });
       setActive(false);
-      //   get data and rerender parent component
       onCardCreated();
     }
   };
@@ -37,16 +36,31 @@ const CreateBoard = function ({ active, setActive, onCardCreated }: createBoard)
     event.preventDefault();
     setSelectedBackground(background);
   };
+
+  const onEnterKeyDown = (event: any) => {
+    if (event.key === 'Enter') setActive(false);
+    if (event.key === 'Enter' && inputValue) {
+      addBoard(event);
+      setActive(false);
+    }
+  };
+
   return (
     <Modal active={active} setActive={setActive}>
-      <form className="form" action="">
-        <label htmlFor="HomeFormColorInput">Background</label>
-        <ul className="listOfButtons">
+      {/* form */}
+      {/* border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    margin: 5px 0 0 0;
+    background: #ececec; */}
+      <form className={classes.form} action="">
+        <p>Background</p>
+        <ul className={classes.colorButtons}>
           {backgroundButtons.map((option) => {
             return (
-              <li className="listOfButtons__list">
+              <li className={classes.list}>
                 <button
-                  className="button"
+                  className={classes.colorButton}
                   style={{ background: `${option.background}` }}
                   onClick={(event) => handleBackgroundClick(event, `${option.background}`)}
                 ></button>
@@ -56,12 +70,16 @@ const CreateBoard = function ({ active, setActive, onCardCreated }: createBoard)
         </ul>
         <label htmlFor="HomeFormTextInput">Title</label>
         <input
+          autoFocus
           value={inputValue}
           type="text"
           id="HomeFormTextInput"
           onChange={(event) => setInputValue(event.target.value)}
+          onKeyDown={onEnterKeyDown}
         />
-        <button onClick={(event) => addBoard(event)}>make</button>
+        <button className={classes.addBoardButton} onClick={(event) => addBoard(event)}>
+          make
+        </button>
       </form>
     </Modal>
   );

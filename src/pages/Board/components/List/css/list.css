@@ -79,7 +79,6 @@ select {
   gap: 7px;
   display: flex;
   max-height: 85vh;
-  overflow: auto;
   flex-direction: column;
 }
 

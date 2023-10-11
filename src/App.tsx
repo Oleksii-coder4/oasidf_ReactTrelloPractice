@@ -9,6 +9,7 @@ import { api } from './common/constants';
 import axios from 'axios';
 import { ErrorBoundary } from 'react-error-boundary';
 import FallbackError from './UI/FallbackError/FallbackError';
+import Header from './Header/Header';
 
 // TODO
 // описать нормально сигнатуры typescript
@@ -17,6 +18,8 @@ function App() {
   return (
     <ErrorBoundary FallbackComponent={FallbackError}>
       <BrowserRouter>
+        {/* <Header /> */}
+
         <Routes>
           <Route
             path="/"

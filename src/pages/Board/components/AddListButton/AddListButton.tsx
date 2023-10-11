@@ -2,28 +2,28 @@ import React, { useState } from 'react';
 import instance from '../../../../api/request';
 import classes from '../Board/css/board.module.css';
 import { addListButton } from './interfaces/addListButton';
-const AddListButton = function ({ params, board, getData, setBoard }: addListButton) {
+const AddListButton = function ({ getData, params, board, setBoard }: addListButton) {
   const [showInputField, setShowInputField] = useState(false);
   const [listInputValue, setListInputValue] = useState('');
   function addList() {
     setShowInputField(true);
   }
   async function handleInputBlur(event: any) {
-    if (listInputValue) {
+    setShowInputField(false);
+
+    if (listInputValue.trim()) {
       handleAddButton();
-      setShowInputField(false);
     }
   }
   async function handleInputKeyDown(event: any) {
-    if (event.key === 'Enter' && listInputValue) {
+    if (event.key === 'Enter') setShowInputField(false);
+    if (event.key === 'Enter' && listInputValue.trim()) {
       handleAddButton();
       setShowInputField(false);
     }
   }
   async function handleAddButton() {
-    console.log(board);
-    console.log(board.lists);
-    if (listInputValue) {
+    if (listInputValue.trim()) {
       setBoard({
         ...board,
         lists: [
@@ -35,14 +35,18 @@ const AddListButton = function ({ params, board, getData, setBoard }: addListBut
         title: listInputValue,
         position: board.lists.length ? board.lists.length + 1 : 1,
       });
+      //it is necessary for addCardButton, it takes id from it
       getData();
     }
   }
+  const boardLimit = board.lists.length > 4;
+
   return (
     <div>
       {showInputField ? (
         <>
           <input
+            autoFocus
             onBlur={handleInputBlur}
             onKeyDown={handleInputKeyDown}
             type="text"
@@ -53,8 +57,8 @@ const AddListButton = function ({ params, board, getData, setBoard }: addListBut
           <button onClick={(event) => setShowInputField(false)}>✖</button>
         </>
       ) : (
-        <button className={classes.board_lists__button} onClick={() => addList()}>
-          Make List
+        <button disabled={boardLimit} className={classes.board_lists__button} onClick={() => addList()}>
+          {boardLimit ? `Lists limit` : `Make List`}
         </button>
       )}
     </div>

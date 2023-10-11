@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   isVisible: false,
+  cardData: {},
 };
 
 export const cardModalVisibilitySlice = createSlice({
@@ -14,9 +15,15 @@ export const cardModalVisibilitySlice = createSlice({
     hideCardModal: (state) => {
       state.isVisible = false;
     },
+    setCardData: (state, action) => {
+      state.cardData = action.payload;
+    },
   },
 });
 
-export const { showCardModal, hideCardModal } = cardModalVisibilitySlice.actions;
+export const selectVisibility = (state) => state.cardModal.isVisible;
+export const selectCardData = (state) => state.cardModal.cardData;
+
+export const { showCardModal, hideCardModal, setCardData } = cardModalVisibilitySlice.actions;
 
 export default cardModalVisibilitySlice.reducer;

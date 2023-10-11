@@ -87,10 +87,4 @@ select {
 .active {
   opacity: 1;
   pointer-events: all;
-}
-
-.modal__content {
-  min-width: 300px;
-  min-height: 200px;
-  background-color: lightgrey;
 }/*# sourceMappingURL=modal.css.map */

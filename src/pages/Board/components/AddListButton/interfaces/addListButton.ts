@@ -1,4 +1,5 @@
 export interface addListButton {
+  getData: any;
   params: any;
   setBoard: any;
   board: {
@@ -26,5 +27,4 @@ export interface addListButton {
       }[];
     }[];
   };
-  getData: () => void;
 }

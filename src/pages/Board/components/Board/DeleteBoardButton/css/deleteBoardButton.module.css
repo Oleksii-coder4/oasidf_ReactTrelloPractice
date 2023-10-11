@@ -1,0 +1,46 @@
+.menu {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.menu__buttons {
+  justify-content: space-around;
+  display: flex;
+  width: 100%;
+}
+
+.menu__text {
+  font-family: cursive;
+  font-size: 15px;
+}
+
+.menu__button {
+  border: 1px solid black;
+  border-radius: 5px;
+  background: rgba(0, 0, 0, 0.1);
+  color: snow;
+  cursor: pointer;
+}
+
+.header__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 37px;
+  height: 37px;
+  background: rgba(0, 0, 0, 0.1);
+  border: 1px solid black;
+  border-radius: 3px;
+  box-sizing: border-box;
+  color: #fff;
+  cursor: pointer;
+  font-family: -apple-system, system-ui, "Segoe UI", "Liberation Sans", sans-serif;
+  font-size: 14px;
+  margin: 0 10px;
+  outline: none;
+  padding: 10px;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+}/*# sourceMappingURL=deleteBoardButton.module.css.map */

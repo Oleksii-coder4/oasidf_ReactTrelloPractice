@@ -2,18 +2,23 @@ import React, { useEffect, useState } from 'react';
 import instance from '../../../../../api/request';
 interface addCardButton {
   listState: any;
+  listId: number;
   cardsState: any;
   setCardsState: any;
-  getData: any;
   boardId: any;
 }
 // TODO: refactor params to boardId only
 //
-const AddCardButton = function ({ listState, cardsState, setCardsState, getData, boardId }: addCardButton) {
+const AddCardButton = function ({ listState, listId, cardsState, setCardsState, boardId }: addCardButton) {
   const [cardIsEditing, setCardIsEditing] = useState(false);
   const [cardInputValue, setCardInputValue] = useState('');
   const [cardPositionToSend, setCardPositionToSend] = useState(0);
+  // const isCardsLimit = cardsState.length > 9;
   async function handleAddCard() {
+    // if (isCardsLimit) {
+    //   setCardIsEditing(false);
+    //   return;
+    // }
     let filterCards: object[] = [];
     if (cardInputValue.trim()) {
       // you need not to use getData, and to use a variable there instead of the card
@@ -33,25 +38,23 @@ const AddCardButton = function ({ listState, cardsState, setCardsState, getData,
       //     return item;
       //   }
       // });
-      instance
-        .post(`board/${boardId}/card`, {
-          title: cardInputValue,
-          list_id: listState.id,
-          position: newPosition ? newPosition : 1,
-        })
-        .then(() => {})
-        // try to add border to elements that don't send
-        .catch((err) => {});
+      instance.post(`board/${boardId}/card`, {
+        title: cardInputValue,
+        list_id: listId,
+        position: newPosition ? newPosition : 1,
+      });
     }
   }
 
   async function handleInputBlur(event: any) {
-    if (cardInputValue) {
+    setCardIsEditing(false);
+
+    if (cardInputValue.trim()) {
       handleAddCard();
-      setCardIsEditing(false);
     }
   }
   async function handleInputKeyDown(event: any) {
+    if (event.key === 'Enter') setCardIsEditing(false);
     if (event.key === 'Enter' && cardInputValue) {
       handleAddCard();
       setCardInputValue('');
@@ -65,6 +68,7 @@ const AddCardButton = function ({ listState, cardsState, setCardsState, getData,
       {cardIsEditing ? (
         <>
           <input
+            autoFocus
             onBlur={handleInputBlur}
             onKeyDown={handleInputKeyDown}
             type="text"
@@ -76,6 +80,7 @@ const AddCardButton = function ({ listState, cardsState, setCardsState, getData,
         </>
       ) : (
         <button
+          // disabled={isCardsLimit}
           onClick={(event) => addCard()}
           type="button"
           style={{ color: 'grey', border: 'none', cursor: 'pointer' }}

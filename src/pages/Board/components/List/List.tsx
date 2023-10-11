@@ -29,6 +29,7 @@ const List = function ({ getData, cards, list, lists, boardId, board, setBoard }
   const [listCards, setListCards] = useState(cards);
   const [listState, setListState] = useState(list);
   const [isMouseDown, setIsmMouseDown] = useState(false);
+  // dispatch();
   useEffect(() => {
     boardLists = JSON.parse(JSON.stringify(board.lists));
   }, []);
@@ -68,8 +69,8 @@ const List = function ({ getData, cards, list, lists, boardId, board, setBoard }
   function handleMouseMove(event: any) {
     event.preventDefault();
     moveCard(event);
-
-    if (!isMouseMove && (event.movementX > 2 || event.movementY > 2)) {
+    // && (event.movementX > 1 || event.movementY > 1)
+    if (!isMouseMove) {
       isMouseMove = true;
       const droppableBelow = getElementBelow(movingElement);
       if (!droppableBelow) return;
@@ -101,6 +102,7 @@ const List = function ({ getData, cards, list, lists, boardId, board, setBoard }
   }
   function handleMouseEnter(event: any) {
     if (!tempArray) return;
+    // if (!isMouseMove) return;
     if (forsakenList.id == listState.id) return;
     // it fix the position of the placeholder, if the amount of cards is 4 but with current card it will be 5 that is why position will be 6, not 5
     if (listCards.find((item: any) => item.id == currentCard.id)) {
@@ -137,11 +139,6 @@ const List = function ({ getData, cards, list, lists, boardId, board, setBoard }
     const tempListIndex = boardLists.findIndex((item: any) => item.id === tempList.id);
     boardLists[forsakenListIndex] = forsakenList;
     boardLists[tempListIndex] = { ...tempList, cards: tempArray };
-    console.log('boardLists');
-    // где-то в board приходят неправильные данные, пофикси пожалуйста
-    console.log(JSON.parse(JSON.stringify(forsakenList)));
-    console.log(JSON.parse(JSON.stringify(tempArray)));
-    console.log(JSON.parse(JSON.stringify(boardLists)));
     setBoard({ ...board, lists: boardLists });
   }
   function handleMouseMoveOnList(event: any) {
@@ -224,7 +221,6 @@ const List = function ({ getData, cards, list, lists, boardId, board, setBoard }
       setBoard({ ...board, lists: newBoardLists });
       boardLists = JSON.parse(JSON.stringify(newBoardLists));
     }
-
     // to put it into backend
     const newCards = boardLists.reduce((accrue: any, item: any, index: number) => {
       const listId = item.id;
@@ -318,6 +314,7 @@ const List = function ({ getData, cards, list, lists, boardId, board, setBoard }
             return (
               <Card
                 key={card.id}
+                list={listState}
                 title={card.title}
                 card={card}
                 styles={
@@ -336,9 +333,9 @@ const List = function ({ getData, cards, list, lists, boardId, board, setBoard }
           })}
         <AddCardButton
           listState={listState}
+          listId={list.id}
           cardsState={listCards}
           setCardsState={setListCards}
-          getData={getData}
           boardId={boardId}
         ></AddCardButton>
       </div>

@@ -18,9 +18,11 @@ interface board {
 }
 const Home = function () {
   const [boards, setBoards] = useState<any>();
-  //for modal
   const [active, setActive] = useState(false);
   const { showBoundary } = useErrorBoundary();
+
+  // спроси можно ли это перенести в отдельны файл и импортировать его в нужные
+  // ----------------------------------------------------------------------
   async function getData() {
     try {
       let response: any = await instance.get('/board');
@@ -40,12 +42,12 @@ const Home = function () {
         <div>
           <div className={classes.body}>
             <div className={classes.header}>
-              <h1 className={classes.header__title}>Home Page</h1>
+              <h1 className={classes.header__title}>Домашня сторінка</h1>
             </div>
             <div className={classes.home}>
               <section className={classes.home__wrapper}>
-                <button className={classes.home__add_button} onClick={(event) => setActive(true)}>
-                  Make new board
+                <button className={classes.home__add_button} onClick={() => setActive(true)}>
+                  Нова Дошка
                 </button>
                 <CreateBoard active={active} setActive={setActive} onCardCreated={getData}></CreateBoard>
                 {boards.length > 0 ? (
@@ -62,7 +64,7 @@ const Home = function () {
                     );
                   })
                 ) : (
-                  <h1 style={{ color: 'black' }}>Нема бордів</h1>
+                  <h1 style={{ color: 'black' }}>Нема дошок</h1>
                 )}
               </section>
             </div>
