@@ -2,10 +2,15 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import instance from '../../api/request';
 
 export const getBoardData = createAsyncThunk('board/getBoardData', async (boardId) => {
-  const response = await instance.get(`/board/${boardId}`);
-  console.log('response');
-  console.log(response);
-  return response;
+  try {
+    const response = await instance.get(`/board/${boardId}`);
+    console.log('response');
+    console.log(response);
+    const board = JSON.parse(JSON.stringify(response));
+    return board;
+  } catch (error) {
+    return error;
+  }
 });
 
 // interface Board {
@@ -29,17 +34,19 @@ const initialState = {
 const boardSlice = createSlice({
   name: 'board', // name of the state
   initialState, // the data which lies in the state
-  reducers: {},
+  reducers: {
+    setBoardLists(state, action) {
+      state.board.lists = action.payload;
+    },
+  },
 
   extraReducers: (builder) => {
-    // Add reducers for additional action types here, and handle loading state as needed
     builder.addCase(getBoardData.fulfilled, (state, action) => {
-      console.log('action', action, 'state', state);
-      state.board = action.payload;
+      const board = JSON.parse(JSON.stringify(action.payload));
+      state.board = board;
     });
   },
 });
-
+export const { setBoardLists } = boardSlice.actions;
 export const getBoard = (state) => state.board.board;
-
 export default boardSlice.reducer;

@@ -2,15 +2,17 @@ import { Link, useParams } from 'react-router-dom';
 import instance from '../../../../../api/request';
 import classes from './css/deleteBoardButton.module.css';
 import { useState } from 'react';
+import { getBoardData } from '../../../../../features/board/boardSlice';
+import { useDispatch } from 'react-redux';
 
-const DeleteBoardButton = ({ getData }) => {
+const DeleteBoardButton = () => {
   const params = useParams();
+  const dispatch = useDispatch();
   const [isAgreeMenuActive, setIsAgreeMenuActive] = useState(false);
   const onDeleteButtonClick = () => setIsAgreeMenuActive(true);
   const onAgreeButtonClick = async () => {
     await instance.delete(`/board/${params.boardId}`);
     setIsAgreeMenuActive(false);
-    getData();
   };
   return (
     <div>

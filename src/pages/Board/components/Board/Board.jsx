@@ -13,18 +13,19 @@ import { getBoard, getBoardData } from '../../../../features/board/boardSlice';
 import DeleteBoardButton from './DeleteBoardButton/DeleteBoardButton';
 // { board }: { board: { title: string; lists: any[] } } ??
 const Board = function () {
+  // проблема того что данные сохраняются в состоянии и при переходе на другую доску я по прежнему вижу пред доску
+  // решение - в момент перехода на хому чистить состояние
+  // была проблема с тем что когда борд попадает в сорт метод, то оно его мутирует и вызывает ошибку
+  // нашел вот такое примитивное решение
+  // let board = JSON.parse(JSON.stringify(boardData));
   const board = useSelector(getBoard);
-  const reduxBoard = useSelector(getBoard);
   const dispatch = useDispatch();
-
-  console.log('reduxBoard');
-  console.log(reduxBoard);
-
   // const [board, setBoard] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const params = useParams();
+  console.log('params');
+  console.log(params);
   const { showBoundary } = useErrorBoundary();
-
   useEffect(() => {
     dispatch(getBoardData(params.boardId));
   }, []);
@@ -63,43 +64,32 @@ const Board = function () {
     }
   );
 
-  if (!board) {
+  if (JSON.parse(JSON.stringify(board) === '{}')) {
     return <Loader></Loader>;
   }
   return (
-    <section className={classes.boardWrapper}>
-      {/* <div className={classes.board} style={{ background: board.custom?.background }}>
+    <section className={classes.boardWrapper} id="boardSection">
+      <div className={classes.board} style={{ background: board.custom?.background }}>
         <div className={classes.header}>
           <nav className={classes.header__nav}>
             <Link to="/" className={classes.header__button}>{`🏠`}</Link>
           </nav>
           <p style={{ fontWeight: 200 }}>Page Id {params.boardId}</p>
           <TitleInput board={board} boardId={params.boardId}></TitleInput>
-          <DeleteBoardButton getData={getData}></DeleteBoardButton>
+          <DeleteBoardButton></DeleteBoardButton>
         </div>
         <div style={{ minHeight: '85vh' }}>
           <div className={classes.board_lists}>
-            {board.lists
+            {[...board?.lists]
               .sort((secondList, firstList) => secondList.position - firstList.position)
               .map(function (list) {
-                return (
-                  <List
-                    key={list.id}
-                    getData={getData}
-                    cards={list.cards}
-                    list={list}
-                    lists={board.lists}
-                    boardId={params.boardId}
-                    board={board}
-                    setBoard={setBoard}
-                  />
-                );
+                return <List key={list.id} list={list} />;
               })}
-            <AddListButton getData={getData} params={params} board={board} setBoard={setBoard}></AddListButton>
+            <AddListButton></AddListButton>
           </div>
         </div>
-        <CardModal></CardModal>
-      </div> */}
+        {/* <CardModal></CardModal> */}
+      </div>
     </section>
   );
 };

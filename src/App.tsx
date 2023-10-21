@@ -14,6 +14,7 @@ import Header from './Header/Header';
 // TODO
 // описать нормально сигнатуры typescript
 // убрать body
+// в Board в List есть вопрос
 function App() {
   return (
     <ErrorBoundary FallbackComponent={FallbackError}>

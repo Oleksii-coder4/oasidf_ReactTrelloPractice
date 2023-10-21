@@ -10,11 +10,11 @@ interface createBoard {
 }
 const CreateBoard = function ({ active, setActive, onCardCreated }: createBoard) {
   const backgroundButtons = [
-    { background: 'linear-gradient(to right, #8360c3, #2ebf91)' },
-    { background: 'linear-gradient(120deg, #d4fc79 0%, #96e6a1 100%)' },
-    { background: 'linear-gradient(to right, #DECBA4, #3E5151)' },
-    { background: 'linear-gradient(to right, #fffbd5, #b20a2c)' },
-    { background: 'linear-gradient(to right, #2c3e50, #4ca1af)' },
+    { background: 'linear-gradient(to right, #8360c3, #2ebf91)', id: 1 },
+    { background: 'linear-gradient(120deg, #d4fc79 0%, #96e6a1 100%)', id: 2 },
+    { background: 'linear-gradient(to right, #DECBA4, #3E5151)', id: 3 },
+    { background: 'linear-gradient(to right, #fffbd5, #b20a2c)', id: 4 },
+    { background: 'linear-gradient(to right, #2c3e50, #4ca1af)', id: 5 },
   ];
   const [selectedBackground, setSelectedBackground] = useState('rgb(0, 113, 191)');
   const [inputValue, setInputValue] = useState('');
@@ -58,7 +58,7 @@ const CreateBoard = function ({ active, setActive, onCardCreated }: createBoard)
         <ul className={classes.colorButtons}>
           {backgroundButtons.map((option) => {
             return (
-              <li className={classes.list}>
+              <li key={option.id} className={classes.list}>
                 <button
                   className={classes.colorButton}
                   style={{ background: `${option.background}` }}
