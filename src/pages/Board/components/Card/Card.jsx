@@ -17,6 +17,7 @@ import CardModal from '../Board/CardModal/CardModal';
 const Card = function ({ list, card, styles, handleMouseDown }) {
   const dispatch = useDispatch();
   const [boardSection, setBoardSection] = useState();
+  const [editedCard, setEditedCard] = useState();
   const listTitle = list.title;
   const title = card.title;
   useEffect(() => {
@@ -39,16 +40,16 @@ const Card = function ({ list, card, styles, handleMouseDown }) {
       onClick={() => {
         dispatch(
           setCardData({
-            title,
-            listTitle,
-            cardDescription: card.description,
+            card,
+            list,
           })
         );
+        setEditedCard(card);
         dispatch(showCardModal());
       }}
     >
       <p className="card__text">{title}</p>
-      {createPortal(<CardModal></CardModal>, boardSection)}
+      {/* {editedCard && createPortal(<CardModal></CardModal>, boardSection)} */}
     </div>
   );
 };

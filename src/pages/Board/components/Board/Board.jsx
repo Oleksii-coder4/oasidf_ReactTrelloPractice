@@ -9,8 +9,9 @@ import Loader from '../../../../UI/Loader/Loader';
 import { useErrorBoundary } from 'react-error-boundary';
 import CardModal from './CardModal/CardModal';
 import { useDispatch, useSelector } from 'react-redux';
-import { getBoard, getBoardData } from '../../../../features/board/boardSlice';
+import { getBoard, getBoardData, setBoardLists } from '../../../../features/board/boardSlice';
 import DeleteBoardButton from './DeleteBoardButton/DeleteBoardButton';
+import { setCardData } from '../../../../features/cardModal/cardModalVisibilitySlice';
 // { board }: { board: { title: string; lists: any[] } } ??
 const Board = function () {
   // проблема того что данные сохраняются в состоянии и при переходе на другую доску я по прежнему вижу пред доску
@@ -23,8 +24,6 @@ const Board = function () {
   // const [board, setBoard] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const params = useParams();
-  console.log('params');
-  console.log(params);
   const { showBoundary } = useErrorBoundary();
   useEffect(() => {
     dispatch(getBoardData(params.boardId));
@@ -72,7 +71,7 @@ const Board = function () {
       <div className={classes.board} style={{ background: board.custom?.background }}>
         <div className={classes.header}>
           <nav className={classes.header__nav}>
-            <Link to="/" className={classes.header__button}>{`🏠`}</Link>
+            <Link to="/" onClick={() => {}} className={classes.header__button}>{`🏠`}</Link>
           </nav>
           <p style={{ fontWeight: 200 }}>Page Id {params.boardId}</p>
           <TitleInput board={board} boardId={params.boardId}></TitleInput>
@@ -88,7 +87,7 @@ const Board = function () {
             <AddListButton></AddListButton>
           </div>
         </div>
-        {/* <CardModal></CardModal> */}
+        <CardModal></CardModal>
       </div>
     </section>
   );

@@ -1,0 +1,73 @@
+.signUpPage_wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: sans-serif;
+  background-image: url('https://images.pexels.com/photos/2929300/pexels-photo-2929300.jpeg');
+  background-position: center;
+  background-size: cover;
+  width: 100vw;
+  height: 100vh;
+}
+
+.signUpPage {
+  width: 500px;
+  margin: auto;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.wrapper {
+  padding: 20px;
+}
+
+.titles {
+  font-size: 30px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.label {
+  font-size: 16px;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  color: #ccc;
+}
+
+.input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.button {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  background-color: #000;
+  color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+
+.link {
+  color: #000;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.inputs:focus {
+  border-color: #000;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+}
+
+.buttons:hover {
+  background-color: #222;
+}

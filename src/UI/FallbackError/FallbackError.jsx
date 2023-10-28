@@ -2,7 +2,6 @@ import React from 'react';
 import classes from './css/FallbackError.module.css';
 const FallbackError = function (props) {
   const { error, resetErrorBoundary } = props;
-  console.log(resetErrorBoundary);
   return (
     <div className={classes.wrapper}>
       <div className={classes.error_container}>

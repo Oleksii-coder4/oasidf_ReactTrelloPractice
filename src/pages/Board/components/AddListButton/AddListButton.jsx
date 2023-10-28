@@ -19,7 +19,6 @@ const AddListButton = function ({ setBoard }) {
   }
   async function handleInputBlur(event) {
     setShowInputField(false);
-
     if (listInputValue.trim()) {
       handleAddButton();
     }
@@ -43,6 +42,7 @@ const AddListButton = function ({ setBoard }) {
       });
       //it is necessary for addCardButton, it takes id from it
       // getData();
+      setListInputValue('');
       dispatch(getBoardData(params.boardId));
     }
   }

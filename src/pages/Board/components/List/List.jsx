@@ -67,6 +67,9 @@ const List = function ({ list }) {
     const currentCardIndex = listCards.findIndex((item) => item.id == currentCardId);
     currentCard = { ...listCards[currentCardIndex] };
     const droppableBelow = getElementBelow(movingElement);
+    // if(droppableBelow.className !==)
+    console.log('droppableBelow');
+    console.log(droppableBelow);
     startList = droppableBelow.closest('.list');
     const currentListId = startList.getAttribute('data-list-id');
     const currentListIndex = lists.findIndex((item) => item.id == currentListId);

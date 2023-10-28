@@ -10,18 +10,27 @@ import axios from 'axios';
 import { ErrorBoundary } from 'react-error-boundary';
 import FallbackError from './UI/FallbackError/FallbackError';
 import Header from './Header/Header';
+import SignUp from './pages/SignUp/SignUp';
 
 // TODO
 // описать нормально сигнатуры typescript
 // убрать body
 // в Board в List есть вопрос
+// в CardModal есть вопрос
+// в Home есть вопрос
 function App() {
   return (
     <ErrorBoundary FallbackComponent={FallbackError}>
       <BrowserRouter>
-        {/* <Header /> */}
-
         <Routes>
+          <Route
+            path="/signUp"
+            element={
+              <ErrorBoundary FallbackComponent={FallbackError}>
+                <SignUp></SignUp>
+              </ErrorBoundary>
+            }
+          ></Route>
           <Route
             path="/"
             element={

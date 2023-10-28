@@ -10,6 +10,10 @@ import EditDescription from './EditDescription/EditDescription';
 const CardModal = function () {
   const isVisible = useSelector(selectVisibility);
   const cardData = useSelector(selectCardData);
+  // почему без (?) не работает cardTitle = cardData.card?.title ?
+  // предположение : модалка отрисовуется еще до нажатия на карточку => что данные пустые, по этому проверка
+  const cardTitle = cardData.card?.title;
+  const listTitle = cardData.list?.title;
   const dispatch = useDispatch();
   return (
     <div
@@ -17,8 +21,8 @@ const CardModal = function () {
       onClick={() => dispatch(hideCardModal())}
     >
       <div className={classes.modal__content} onClick={(event) => event.stopPropagation()}>
-        <h1 className={classes.modal__title}>{cardData.title}</h1>
-        <p className={classes.modal__text}>У списку {cardData.listTitle}</p>
+        <h1 className={classes.modal__title}>{cardTitle}</h1>
+        <p className={classes.modal__text}>У списку {listTitle}</p>
         <div>
           <div>
             <h2 className={classes.modal__text}>Користувачі</h2>
@@ -29,7 +33,7 @@ const CardModal = function () {
           <div>
             {/* react portal */}
             <h2 className={classes.modal__text}>Опис</h2>
-            <p>{cardData.cardDescription ? cardData.cardDescription : 'Опис відсутній'}</p>
+            <p>{cardData.card?.description ? cardData.card?.description : 'Опис відсутній'}</p>
           </div>
           <EditDescription></EditDescription>
         </div>

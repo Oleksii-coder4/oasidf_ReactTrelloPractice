@@ -4,8 +4,6 @@ import instance from '../../api/request';
 export const getBoardData = createAsyncThunk('board/getBoardData', async (boardId) => {
   try {
     const response = await instance.get(`/board/${boardId}`);
-    console.log('response');
-    console.log(response);
     const board = JSON.parse(JSON.stringify(response));
     return board;
   } catch (error) {

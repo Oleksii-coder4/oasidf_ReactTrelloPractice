@@ -16,6 +16,8 @@ interface board {
     background: string;
   };
 }
+
+// По идее у меня должны подгружатся данные 1-н раз и после этого мгновенно отрисовыватся при любых переходах, но каждый раз оно берет новые данные
 const Home = function () {
   const [boards, setBoards] = useState<any>();
   const [active, setActive] = useState(false);
@@ -36,6 +38,8 @@ const Home = function () {
   useEffect(() => {
     getData();
   }, []);
+  // TODO
+  // 1 фон бледно фиолетовый
   return (
     <div>
       {boards ? (
@@ -47,7 +51,7 @@ const Home = function () {
             <div className={classes.home}>
               <section className={classes.home__wrapper}>
                 <button className={classes.home__add_button} onClick={() => setActive(true)}>
-                  Нова Дошка
+                  Створити нову дошку
                 </button>
                 <CreateBoard active={active} setActive={setActive} onCardCreated={getData}></CreateBoard>
                 {boards.length > 0 ? (
